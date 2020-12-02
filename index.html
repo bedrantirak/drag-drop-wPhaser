@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="js/phaser.min.js"></script>
+</head>
+
+
+<body>
+ 
+  <div>
+<label for="color">Color: </label>
+<input type="text" name="color" size="20" id="color" />
+<button id="btn-a" type="button" onClick="javascript:changeBGC()">Submit</button>
+  </div>
+   
+   
+    <script>
+        var config = {
+            type: Phaser.AUTO,
+            width: 950,
+            height: 600,
+            backgroundColor: '#ecda07',
+            scene : {
+                preload : preload,
+                create: create             
+            }
+        };
+        
+        var game = new Phaser.Game(config);
+        var bset = [];
+        var image = [];
+        
+     
+        //bg color
+        
+        function changeBGC(color){
+    document.body.style.backgroundColor = 
+        document.getElementById('color').value; 
+     }
+       
+        //preload
+
+       function preload () {
+           
+           this.load.image('baby','asset/thebaby.png');
+        
+           this.load.atlas('b', 'asset/b.png','asset/b.json');
+       }
+        
+        //create
+        
+       function create () {
+           
+           this.add.image(200,300,'baby');
+           
+           bset = this.textures.get('b').getFrameNames();
+           var i;
+           for(i=0;i<13;i++){
+               image [i] = this.add.sprite(Math.random()*250+500,Math.random()*500+50,'b',bset[i]).setInteractive();
+               this.input.setDraggable(image[i]);
+           }
+           
+           this.input.on('gameobjectover', function(pointer,gameObject){
+               gameObject.setTint(0xFFC0CB);
+           });
+           
+            this.input.on('gameobjectout', function(pointer,gameObject){
+               gameObject.clearTint();
+           });
+           
+           //drag
+           
+           this.input.on('dragstart', function(pointer,gameObject){
+               gameObject.setTint(0xff0000);
+           });
+           
+           this.input.on('drag', function(pointer,gameObject,dragX,dragY){
+               gameObject.x = dragX;
+               gameObject.y = dragY;
+           });
+           
+           this.input.on('dragend', function(pointer,gameObject){ 
+               gameObject.clearTint();
+           });
+           
+         }
+
+       
+    
+    </script>
+    
+</body>
+</html>
